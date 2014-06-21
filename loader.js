@@ -13,7 +13,7 @@ var jswig = function() {
 var $ = jswig;
 
 // Load components
-load( "components/eventmanager.js" );
+// none
 
 // Load core modules
 load( "core/init.js" );

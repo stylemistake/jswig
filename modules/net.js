@@ -1,8 +1,8 @@
-// $.net
 (function( $ ) {
 
-	$.net = function() {
+// $.net
+$.net = function() {
 
-	};
+};
 
 })( jswig );

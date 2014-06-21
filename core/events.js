@@ -1,11 +1,15 @@
-// $.events
+// Load dependencies
+load( "../components/eventmanager.js" );
+
 (function( $ ) {
 
-	$.events = new EventManager();
+// $.events
+$.events = new EventManager();
 
-	$.ready = function( f ) {
-		$.events.on( "ready", f );
-		return $;
-	};
+// $.ready
+$.ready = function( f ) {
+	$.events.on( "ready", f );
+	return $;
+};
 
 })( jswig );
