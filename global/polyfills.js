@@ -29,7 +29,19 @@ Object.values = function( o ) {
 	return Object.keys( o ).map(function( p ) {
 		return o[ p ];
 	});
-}
+};
+
+Object.defineProperties = function (o, properties) {
+	if ( o !== Object( o ) ) {
+		throw TypeError( "Object.defineProperties called on non-object" );
+	}
+	for ( var name in properties ) {
+		if ( Object.prototype.hasOwnProperty.call( properties, name ) ) {
+			Object.defineProperty( o, name, properties[ name ] );
+		}
+	}
+	return o;
+};
 
 Object.defineProperty = function( o, prop, data ) {
 	if ( o !== Object( o ) ) {
@@ -47,24 +59,25 @@ Object.defineProperty = function( o, prop, data ) {
 	return o;
 };
 
-// Object.create = function ( prototype, properties ) {
-// 	if ( typeof prototype !== "object" ) {
-// 		throw TypeError();
-// 	}
-// 	function ObjectCtor() {}
-// 	ObjectCtor.prototype = prototype;
-// 	var o = new ObjectCtor();
-// 	if ( prototype ) {
-// 		o.constructor = ObjectCtor;
-// 	}
-// 	if ( properties !== undefined ) {
-// 		if ( properties !== Object( properties ) ) {
-// 			throw TypeError();
-// 		}
-// 		Object.defineProperties( o, properties );
-// 	}
-// 	return o;
-// };
+Object.create = function ( prototype, properties ) {
+	if ( typeof prototype !== "object" ) {
+		throw TypeError();
+	}
+	/** @constructor */
+	function Ctor() {}
+	Ctor.prototype = prototype;
+	var o = new Ctor();
+	if ( prototype ) {
+		o.constructor = Ctor;
+	}
+	if ( properties !== undefined ) {
+		if ( properties !== Object( properties ) ) {
+			throw TypeError();
+		}
+		Object.defineProperties( o, properties );
+	}
+	return o;
+};
 
 Array.prototype.reduce = function ( fun ) {
 	if ( this === void 0 || this === null ) {

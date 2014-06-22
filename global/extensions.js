@@ -19,13 +19,27 @@ Number.prototype.inRange = function( a, b ) {
 	return ( value >= a ) && ( value <= b );
 };
 
+Number.prototype.toHex = function() {
+	var upper = ( this.valueOf() >> 4 ) & 0x0F,
+		lower = this.valueOf() & 0x0F;
+	return upper.toString( 16 ) + lower.toString( 16 );
+};
+
 Object.linkProperty = function( o, a, b ) {
 	Object.defineProperty( o, b, {
 		"get": function() {
-			return o[ a ];
+			return this[ a ];
 		},
 		"set": function( value ) {
-			o[ a ] == b;
+			this[ a ] == value;
 		}
 	});
+};
+
+Array.init = function( n, value ) {
+	var i, a = new Array( n );
+	for ( i = 0; i < n; i += 1 ) {
+		a[ i ] = value;
+	}
+	return a;
 };

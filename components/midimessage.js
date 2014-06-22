@@ -1,44 +1,78 @@
+// MidiMessage
+// Midi message object with virtual parameters
+
 function MidiMessage() {
 
-	var self = this,
-		args = Array.prototype.slice.call( arguments, 0 ),
-		message;
+	var args = Array.prototype.slice.call( arguments, 0 );
 
-	if ( typeof args[0] === "object" ) {
-		message = args[0];
+	// Apply message props to object
+	// Missing parts are lazily calculated via prototype getters and setters
+	if ( typeof args[ 0 ] === "object" ) {
+		for ( var i in args[ 0 ] ) {
+			this[ i ] = message[ i ];
+		}
 	} else {
-		message = {
-			"status": args[0],
-			"data1": args[1],
-			"data2": args[2]
-		};
+		this.status = args[ 0 ];
+		this.data1 = args[ 1 ];
+		this.data2 = args[ 2 ];
 	}
 
-	function isNote( status ) {
-		return inRange( status, 0x80, 0x9f );
-	}
+}
 
-	function isNoteOn( status ) {
-		return inRange( status, 0x90, 0x9f );
-	}
+MidiMessage.prototype = (function() {
 
-	function isNoteOff( status ) {
-		return inRange( status, 0x80, 0x8f );
-	}
+	this.isNote = function() {
+		return inRange( this.status, 0x80, 0x9f );
+	};
 
-	function isControl( status ) {
-		return inRange( status, 0xb0, 0xbf );
-	}
+	this.isNoteOff = function() {
+		return inRange( this.status, 0x80, 0x8f );
+	};
 
-	function toRelative( data2 ) {
-		return ( data2 < 0x40 ? data2 : data2 - 0x80 );
-	}
+	this.isNoteOn = function() {
+		return inRange( this.status, 0x90, 0x9f );
+	};
+
+	this.isKeyPressure = function() {
+		return inRange( this.status, 0xa0, 0xaf );
+	};
+
+	this.isControl = function() {
+		return inRange( this.status, 0xb0, 0xbf );
+	};
+
+	this.isProgramChange = function() {
+		return inRange( this.status, 0xc0, 0xcf );
+	};
+
+	this.isChannelPressure = function() {
+		return inRange( this.status, 0xd0, 0xdf );
+	};
+
+	this.isPitchbend = function() {
+		return inRange( this.status, 0xe0, 0xef );
+	};
+
+	this.isAftertouch = function() {
+		return this.isKeyPressure() || this.isChannelPressure();
+	};
+
+	// this.toString = function() {
+	// 	return "MIDI: " +
+	// 		this.status.toHex() + " " +
+	// 		this.data1.toHex() + " " +
+	// 		this.data2.toHex();
+	// };
 
 	Object.defineProperty( this, "type", {
 		"get": function() {
-			if ( this.status.inRange( 0x80, 0x9f ) ) {
-				return "note";
-			}
+			if ( this.isNote() ) return "note";
+			if ( this.isControl() ) return "cc";
+			if ( this.isProgramChange() ) return "pc";
+			if ( this.isKeyPressure() ) return "kp";
+			if ( this.isChannelPressure() ) return "kp";
+			if ( this.isPitchbend() ) return "pb";
+			return null;
 		}
 	});
 
@@ -65,10 +99,6 @@ function MidiMessage() {
 	Object.linkProperty( this, "data1", "note" );
 	Object.linkProperty( this, "data2", "value" );
 
-	// Apply message props to publish them in object
-	// and also calculate missing parts
-	for ( var i in message ) {
-		this[ i ] = message[ i ];
-	}
+	return this;
 
-}
+})();

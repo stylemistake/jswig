@@ -16,7 +16,6 @@ var $ = jswig;
 
 // Load components
 // none
-load( "components/midimessage.js" );
 
 // Load core modules
 load( "core/init.js" );
@@ -24,4 +23,4 @@ load( "core/events.js" );
 load( "core/log.js" );
 
 // Load optional modules
-// <write your code here>
+load( "modules/midi.js" );
