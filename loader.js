@@ -1,6 +1,8 @@
 loadAPI( 1 );
 
 load( "global/polyfills.js" );
+load( "global/extensions.js" );
+load( "global/json.js" );
 load( "global/helpers.js" );
 
 // Jswig contructor
@@ -14,6 +16,7 @@ var $ = jswig;
 
 // Load components
 // none
+load( "components/midimessage.js" );
 
 // Load core modules
 load( "core/init.js" );

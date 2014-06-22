@@ -43,7 +43,7 @@ $.init = function( config ) {
 		$.events.trigger( "_jswig_core_init" );
 		$.events.trigger( "_jswig_module_init" );
 		$.log( "jswig loaded" );
-		$.events.trigger( "ready" );
+		$.events.trigger( "ready", $ );
 	}
 
 	return $;
