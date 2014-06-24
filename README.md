@@ -10,8 +10,14 @@ as a foundation for your own applications.
 
 ### Status
 
-It is still in development, as this README file. All documentation will be
-provided later.
+It is still in development, as this README file, and not suitable to use in
+production.
+
+If you have some cool components that can have a good use in JSWig as a
+stand-alone component or as a module, send pull requests. I'd be happy to pull
+one!
+
+All documentation will be provided later.
 
 
 ### Sample code
