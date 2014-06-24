@@ -12,7 +12,7 @@ $.profile = (function() {
 		ts1 = new Date();
 	}
 
-	this.finish = function() {
+	this.stop = function() {
 		ts2 = new Date();
 		result = ts2.getTime() - ts1.getTime();
 		$.log( "profile: finished in " + result + "ms" );

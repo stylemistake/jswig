@@ -10,7 +10,7 @@ function MidiMessage() {
 	// Missing parts are lazily calculated via prototype getters and setters
 	if ( typeof arguments[ 0 ] === "object" ) {
 		for ( var i in arguments[ 0 ] ) {
-			this[ i ] = message[ i ];
+			this[ i ] = arguments[ 0 ][ i ];
 		}
 	} else {
 		this.status = arguments[ 0 ];

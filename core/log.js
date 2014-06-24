@@ -22,13 +22,13 @@ function getString( args ) {
 		str += data;
 	});
 	return str;
-}
+};
 
 $.log.sync = function() {
 	var args = Array.slice( arguments );
 	host.println( getString( args ) );
 	return $;
-}
+};
 
 var queue = [];
 
@@ -44,12 +44,12 @@ $.log.async = function() {
 		}, [], 0 );
 	}
 	return $;
-}
+};
 
 $.log.error = function() {
 	var args = Array.slice( arguments );
 	host.errorln( getString( args ) );
 	return $;
-}
+};
 
 })( jswig );

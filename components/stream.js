@@ -14,9 +14,9 @@ function Stream( tail ) {
 }
 
 // Append data to stream
-Stream.prototype.put = function( item ) {
+Stream.prototype.put = function( item, context ) {
 	for ( var i = 0; i < this.consumers.length; i += 1 ) {
-		this.consumers[ i ]( item );
+		this.consumers[ i ]( item, context );
 	}
 	return this;
 };
@@ -33,6 +33,24 @@ Stream.prototype.map = function( fun ) {
 	var s = new this.constructor( this );
 	s.mappers.push( fun );
 	return s;
+};
+
+// Repeat incoming data given times
+Stream.prototype.repeat = function( num ) {
+	var i, s = new this.constructor( this );
+	// TODO: Implement lazy evaluation
+	if ( num === undefined ) {
+		throw Error( "Stream: repeat: infinite loop" );
+	}
+	if ( num === 0 ) {
+		s.filters = function() { return false; };
+		return s;
+	}
+	if ( typeof num === "number" ) {
+		for ( i = 0; i < num; i += 1 ) {
+			// TODO: What?
+		}
+	}
 };
 
 // Add consumer
