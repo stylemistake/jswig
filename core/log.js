@@ -4,6 +4,12 @@ load( "../components/array.js" );
 
 (function( $ ) {
 
+// $.log
+$.log = function() {
+	$.log.sync.apply( this, arguments );
+};
+
+// Convert argument list to a human readable string
 function getString( args ) {
 	var str = "";
 	args.forEach(function( data, i ) {
@@ -18,12 +24,27 @@ function getString( args ) {
 	return str;
 }
 
-// $.log
-$.log = function() {
+$.log.sync = function() {
 	var args = Array.slice( arguments );
 	host.println( getString( args ) );
 	return $;
-};
+}
+
+var queue = [];
+
+$.log.async = function() {
+	var args = Array.slice( arguments );
+	queue.push( getString( args ) );
+	if ( queue.length === 1 ) {
+		host.scheduleTask( function() {
+			if ( queue.length > 0 ) {
+				host.println( queue.join("\n") );
+				queue = [];
+			}
+		}, [], 0 );
+	}
+	return $;
+}
 
 $.log.error = function() {
 	var args = Array.slice( arguments );
