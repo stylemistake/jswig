@@ -1,7 +1,5 @@
 loadAPI( 1 );
 
-load( "global/helpers.js" );
-
 // Jswig contructor
 // TODO: currently unused
 var jswig = function() {
@@ -10,6 +8,16 @@ var jswig = function() {
 
 // Assign jswig to a global shortcut name
 var $ = jswig;
+
+// Load globals
+load( "global/helpers.js" );
+
+// Load basic components
+load( "components/array.js" );
+load( "components/function.js" );
+load( "components/number.js" );
+load( "components/object.js" );
+load( "components/string.js" );
 
 // Load core modules
 load( "core/init.js" );
@@ -32,7 +40,7 @@ $.load = function( names, base_dir ) {
 		load( base_dir + "/modules/" + name + ".js" );
 	});
 	return $;
-}
+};
 
 // Load modules
 $.load([ "midi", "profile" ]);
