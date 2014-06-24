@@ -1,8 +1,5 @@
 loadAPI( 1 );
 
-load( "global/polyfills.js" );
-load( "global/extensions.js" );
-load( "global/json.js" );
 load( "global/helpers.js" );
 
 // Jswig contructor
@@ -14,13 +11,29 @@ var jswig = function() {
 // Assign jswig to a global shortcut name
 var $ = jswig;
 
-// Load components
-// none
-
 // Load core modules
 load( "core/init.js" );
 load( "core/events.js" );
 load( "core/log.js" );
 
-// Load optional modules
-load( "modules/midi.js" );
+$.log( "jswig: core modules loaded!" );
+
+// $.load
+// Module loader
+$.load = function( names, base_dir ) {
+	if ( base_dir === undefined ) {
+		base_dir = "."
+	}
+	if ( typeof names === "string" ) {
+		names = [ names ];
+	}
+	names.forEach(function( name ) {
+		$.log( "jswig: loading [modules/" + name + ".js]..." );
+		load( base_dir + "/modules/" + name + ".js" );
+	});
+	return $;
+}
+
+// Load modules
+$.load([ "midi", "profile" ]);
+$.log( "jswig: main modules loaded!" );

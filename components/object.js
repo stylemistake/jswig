@@ -1,7 +1,3 @@
-// Polyfills
-
-// All polyfills here enable non-available
-
 Object.keys = (function() {
 	var hasOwnProperty = Object.prototype.hasOwnProperty,
 		hasDontEnumBug = !({ toString: null }).propertyIsEnumerable("toString"),
@@ -31,7 +27,7 @@ Object.values = function( o ) {
 	});
 };
 
-Object.defineProperties = function (o, properties) {
+Object.defineProperties = function( o, properties ) {
 	if ( o !== Object( o ) ) {
 		throw TypeError( "Object.defineProperties called on non-object" );
 	}
@@ -59,7 +55,7 @@ Object.defineProperty = function( o, prop, data ) {
 	return o;
 };
 
-Object.create = function ( prototype, properties ) {
+Object.create = function( prototype, properties ) {
 	if ( typeof prototype !== "object" ) {
 		throw TypeError();
 	}
@@ -79,46 +75,19 @@ Object.create = function ( prototype, properties ) {
 	return o;
 };
 
-Array.prototype.reduce = function ( fun ) {
-	if ( this === void 0 || this === null ) {
-		throw TypeError();
-	}
+Object.extend = function( a, b ) {
+	Object.keys( b ).forEach( function( i ) {
+		a[ i ] = b[ i ];
+	});
+};
 
-	var t = Object( this );
-	var len = t.length >>> 0;
-	if ( typeof fun !== "function" ) {
-		throw TypeError( "No function provided" );
-	}
-
-	// no value to return if no initial value and an empty array
-	if ( len === 0 && arguments.length === 1 ) {
-		throw TypeError();
-	}
-
-	var k = 0;
-	var accumulator;
-	if ( arguments.length >= 2 ) {
-		accumulator = arguments[ 1 ];
-	} else {
-		while ( true ) {
-			if ( k in t ) {
-				accumulator = t[ k++ ];
-				break;
-			}
-
-			// if array contains no values, no initial value to return
-			if ( ++k >= len ) {
-				throw TypeError();
-			}
+Object.linkProperty = function( o, a, b ) {
+	Object.defineProperty( o, b, {
+		"get": function() {
+			return this[ a ];
+		},
+		"set": function( value ) {
+			this[ a ] = value;
 		}
-	}
-
-	while ( k < len ) {
-		if ( k in t ) {
-			accumulator = fun.call( undefined, accumulator, t[ k ], k, t );
-		}
-		k += 1;
-	}
-
-	return accumulator;
+	});
 };

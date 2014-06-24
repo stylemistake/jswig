@@ -1,25 +1,30 @@
 // MidiMessage
 // Midi message object with virtual parameters
 
-function MidiMessage() {
+load( "number.js" );
+load( "object.js" );
 
-	var args = Array.prototype.slice.call( arguments, 0 );
+function MidiMessage() {
 
 	// Apply message props to object
 	// Missing parts are lazily calculated via prototype getters and setters
-	if ( typeof args[ 0 ] === "object" ) {
-		for ( var i in args[ 0 ] ) {
+	if ( typeof arguments[ 0 ] === "object" ) {
+		for ( var i in arguments[ 0 ] ) {
 			this[ i ] = message[ i ];
 		}
 	} else {
-		this.status = args[ 0 ];
-		this.data1 = args[ 1 ];
-		this.data2 = args[ 2 ];
+		this.status = arguments[ 0 ];
+		this.data1 = arguments[ 1 ];
+		this.data2 = arguments[ 2 ];
 	}
 
 }
 
 MidiMessage.prototype = (function() {
+
+	this.isValid = function() {
+		return !( isNaN( this.status ) && isNaN( this.data1 ) && isNaN( this.data2 ) );
+	}
 
 	this.isNote = function() {
 		return inRange( this.status, 0x80, 0x9f );
@@ -57,12 +62,22 @@ MidiMessage.prototype = (function() {
 		return this.isKeyPressure() || this.isChannelPressure();
 	};
 
-	// this.toString = function() {
-	// 	return "MIDI: " +
-	// 		this.status.toHex() + " " +
-	// 		this.data1.toHex() + " " +
-	// 		this.data2.toHex();
-	// };
+	this.toString = function() {
+		if ( !this.isValid() ) {
+			return "Invalid MIDI message";
+		}
+		var s = "MIDI: ";
+		if ( this.port !== undefined ) {
+			s += "p" + this.port + " ";
+		}
+		s += "c" + this.channel + ", ";
+		s += this.status + " " + this.data1 + " " + this.data2 + ", ";
+		s += "[" +
+			this.status.toHex() + " " +
+			this.data1.toHex() + " " +
+			this.data2.toHex() + "]";
+		return s;
+	};
 
 	Object.defineProperty( this, "type", {
 		"get": function() {

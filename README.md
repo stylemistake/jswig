@@ -17,16 +17,34 @@ provided later.
 ### Sample code
 
 ```
-load( "jswig/loader.js" );
+load( "vendor/jswig/loader.js" );
 
 $.init({
 	"name": "Some controller",
 	"uuid": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 	// Replace with your UUID
+	"midi": {
+		"ports_in": 1,
+		"ports_out": 1,
+	},
 });
 
 $.ready(function() {
-	$.log( "Hello world!" );
+	$.midi.filterCC()
+		.filter(function( msg ) {
+			return msg.value.inRange( 0x20, 0x60 );
+		})
+		.map(function( msg ) {
+			msg.channel += msg.value % 7;
+			return msg;
+		})
+		.each(function( msg ) {
+			$.log( msg );
+		});
+	$.midi.filterNote()
+		.each(function( msg ) {
+			$.log( msg );
+		});
 });
 ```
 
