@@ -5,11 +5,11 @@ load( "object.js" );
 load( "midimessage.js" );
 load( "stream.js" );
 
-function MidiStream( tail ) {
+function MidiStream( parent ) {
 
 	this.ports = [];
 
-	Object.extend( this, new Stream( tail ) );
+	Object.extend( this, new Stream( parent ) );
 
 };
 
@@ -23,7 +23,7 @@ MidiStream.prototype.addMidiInPort = function( port ) {
 		midi_in.setMidiCallback(function( a, b, c ) {
 			var m = new MidiMessage( a, b, c );
 			m.port = port;
-			self.put( m );
+			self.push( m );
 		});
 		// Save port in array for later use
 		this.ports.push( midi_in );
