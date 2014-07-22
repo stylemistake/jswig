@@ -134,6 +134,7 @@ Stream.prototype.where = function( a, b ) {
 			return item[ a ] == b;
 		});
 	}
+	return this;
 };
 
 // Map
