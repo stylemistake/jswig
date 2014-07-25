@@ -5,18 +5,14 @@
 load( "object.js" );
 
 function Stream( parent ) {
-
 	this.parent = parent;
 	this.modifiers = {};
 	this.consumers = [];
-
 }
-
-
 
 (function() {
 
-	// Create consumer function
+	// Create a consumer function with recursively mapped modifiers
 	// All stream manipulating logic is here
 	Stream.createConsumer = function( callback, modifiers ) {
 		// Define default consumer
@@ -188,7 +184,7 @@ Stream.prototype.skip = function( num ) {
 
 // Add consumer, which is called on every message
 Stream.prototype.each = function( callback ) {
-	var consumer = this.constructor.createConsumer( callback, this.modifiers );
+	var consumer = Stream.createConsumer( callback, this.modifiers );
 	this.consumers.push( consumer );
 	if ( this.parent !== undefined ) {
 		this.parent.each( consumer );
@@ -199,7 +195,7 @@ Stream.prototype.each = function( callback ) {
 // Add consumer, which is called once
 Stream.prototype.once = function( callback ) {
 	this.modifiers.take = 1;
-	var consumer = this.constructor.createConsumer( callback, this.modifiers );
+	var consumer = Stream.createConsumer( callback, this.modifiers );
 	this.consumers.push( consumer );
 	if ( this.parent !== undefined ) {
 		this.parent.once( consumer );

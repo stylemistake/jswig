@@ -6,13 +6,11 @@ load( "midimessage.js" );
 load( "stream.js" );
 
 function MidiStream( parent ) {
-
 	this.ports = [];
-
-	Object.extend( this, new Stream( parent ) );
-
+	Stream.call( this, parent );
 };
 
+// Inherit Stream prototype methods
 Object.extend( MidiStream.prototype, Stream.prototype );
 
 MidiStream.prototype.addMidiInPort = function( port ) {
@@ -37,7 +35,7 @@ MidiStream.prototype.addMidiInPort = function( port ) {
 	}
 };
 
-MidiStream.prototype.filter = function( expr ) {
+MidiStream.prototype.filter = function( expr, i ) {
 	if ( typeof expr === "string" ) {
 		// TODO: Add string expression handling
 		return this;
