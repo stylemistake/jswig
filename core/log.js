@@ -13,6 +13,9 @@ $.log = function() {
 function getString( args ) {
 	var str = "";
 	args.forEach(function( data, i ) {
+		if ( data === undefined ) {
+			data = "undefined";
+		} else
 		if ( data.toString === Object.prototype.toString ) {
 			data = JSON.stringify( data, null, 4 );
 		}

@@ -6,8 +6,8 @@ Array.init = function( n, value ) {
 	return a;
 };
 
-Array.slice = function( a ) {
-	return Array.prototype.slice.call( a );
+Array.slice = function( a, b ) {
+	return Array.prototype.slice.call( a, b );
 }
 
 Array.prototype.reduce = function( fun ) {
