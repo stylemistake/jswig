@@ -6,7 +6,7 @@ load( "timer.js" );
 
 function Dispatcher() {
 	this.queue = {};
-	this.timer = new Timer( 500 );
+	this.interval = 500;
 	this.callbacks = [];
 }
 
@@ -26,7 +26,7 @@ Dispatcher.prototype.setInterval = function( interval ) {
 	if ( typeof interval !== "number" ) {
 		throw TypeError( "Not a number" );
 	}
-	this.timer.interval = interval;
+	this.interval = interval;
 	return this;
 };
 
@@ -47,15 +47,14 @@ Dispatcher.prototype.send = function( key, data ) {
 	return this;
 };
 
-Dispatcher.prototype.clear = function( key ) {
-	if ( key === undefined ) {
-		// Clear all queue
-		for ( var i in queue ) {
-			delete queue[ i ];
-		}
-	} else {
-		// Clear only one key
-		delete queue[ key ];
+Dispatcher.prototype.remove = function( key ) {
+	delete queue[ key ];
+	return this;
+};
+
+Dispatcher.prototype.clear = function() {
+	for ( var i in queue ) {
+		delete queue[ i ];
 	}
 	return this;
 };
@@ -69,11 +68,15 @@ Dispatcher.prototype.flush = function() {
 
 Dispatcher.prototype.start = function() {
 	// Start timer
-	this.timer.start( this.flush, this );
+	if ( this.timer ) {
+		this.timer.stop();
+	}
+	this.timer = Timer.interval( this.flush, this, undefined, this.interval );
 	return this;
 };
 
 Dispatcher.prototype.stop = function() {
+	// Stop timer
 	this.timer.stop();
 	return this;
 };

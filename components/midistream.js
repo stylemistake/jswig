@@ -40,14 +40,6 @@ MidiStream.prototype.setMidiInPort = function( port ) {
 	}
 };
 
-MidiStream.prototype.filter = function( expr, i ) {
-	if ( typeof expr === "string" ) {
-		// TODO: Add string expression handling
-		return this;
-	}
-	return Stream.prototype.filter.apply( this, [ expr ] );
-}
-
 MidiStream.prototype.filterNote = function() {
 	return this.filter(function( msg ) {
 		return msg.isNote();

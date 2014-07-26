@@ -64,7 +64,7 @@ Object.linkProperty( MidiMessage.prototype, "data2", "value" );
 
 MidiMessage.prototype.isValid = function() {
 	return !( isNaN( this.status ) && isNaN( this.data1 ) && isNaN( this.data2 ) );
-}
+};
 
 MidiMessage.prototype.isNote = function() {
 	return inRange( this.status, 0x80, 0x9f );
@@ -119,10 +119,10 @@ MidiMessage.prototype.toString = function() {
 	return s;
 };
 
-MidiMessage.prototype.toHash = function() {
+MidiMessage.prototype.toHashString = function() {
 	var s = "m" + this.status + "_" + this.data1
 	if ( this.port !== undefined ) {
 		s += "_" + this.port;
 	}
 	return s;
-}
+};

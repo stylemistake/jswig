@@ -26,18 +26,16 @@ Object.extend( MidiDispatcher.prototype, Dispatcher.prototype );
 // Add MIDI message to the queue
 MidiDispatcher.prototype.add = function( msg ) {
 	if ( typeof msg === "object" ) {
-		return Dispatcher.prototype.add.call( this, msg.toHash(), msg );
+		return Dispatcher.prototype.add.call( this, msg.toHashString(), msg );
 	} else {
 		return Dispatcher.prototype.add.apply( this, arguments );
 	}
 };
 
-MidiDispatcher.prototype.queue = MidiDispatcher.prototype.add;
-
 // Send MIDI message without queueing
 MidiDispatcher.prototype.send = function( msg ) {
 	if ( typeof msg === "object" ) {
-		return Dispatcher.prototype.send.call( this, msg.toHash(), msg );
+		return Dispatcher.prototype.send.call( this, msg.toHashString(), msg );
 	} else {
 		return Dispatcher.prototype.send.apply( this, arguments );
 	}
@@ -45,5 +43,9 @@ MidiDispatcher.prototype.send = function( msg ) {
 
 // Remove MIDI message from the queue
 MidiDispatcher.prototype.remove = function( msg ) {
-	return Dispatcher.prototype.clear.call( this, msg.toHash() );
+	if ( typeof msg === "object" ) {
+		return Dispatcher.prototype.remove.call( this, msg.toHashString(), msg );
+	} else {
+		return Dispatcher.prototype.remove.apply( this, arguments );
+	}
 };

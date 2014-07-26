@@ -6,10 +6,10 @@ load( "../components/mididispatcher.js" );
 
 // $.midi
 // MIDI provider
-$.midiIn = new MidiStream();
-$.midiOut = new MidiDispatcher();
+$.midi = {};
+$.midi.input = new MidiStream();
+$.midi.output = new MidiDispatcher();
 
-$.midi = $.midiIn;
 
 // Default config
 $.config.midi = {
@@ -19,9 +19,9 @@ $.config.midi = {
 
 $.events.on( "_jswig_module_init", function() {
 	for ( var i = 0; i < $.config.midi.ports_in; i += 1 ) {
-		$.midiIn.setMidiInPort( i );
+		$.midi.input.setMidiInPort( i );
 	}
-	$.midiOut.start();
+	$.midi.output.start();
 });
 
 })( jswig );
