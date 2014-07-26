@@ -1,19 +1,24 @@
-// MidiStream
-// Manages MIDI data
-
 load( "object.js" );
 load( "midimessage.js" );
 load( "stream.js" );
+
+
+// MidiStream
+// Manages MIDI data
 
 function MidiStream( parent ) {
 	this.ports = [];
 	Stream.call( this, parent );
 };
 
+
+
+// Prototype methods
+
 // Inherit Stream prototype methods
 Object.extend( MidiStream.prototype, Stream.prototype );
 
-MidiStream.prototype.addMidiInPort = function( port ) {
+MidiStream.prototype.setMidiInPort = function( port ) {
 	var self = this,
 		midi_in = host.getMidiInPort( port );
 	try {

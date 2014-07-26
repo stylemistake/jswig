@@ -1,8 +1,9 @@
+load( "object.js" );
+
+
 // Stream
 // Manages async data in a lazy way with an MQ-like interface
 // with filters and more.
-
-load( "object.js" );
 
 function Stream( parent ) {
 	this.parent = parent;
@@ -10,91 +11,9 @@ function Stream( parent ) {
 	this.consumers = [];
 }
 
-(function() {
-
-	// Create a consumer function with recursively mapped modifiers
-	// All stream manipulating logic is here
-	Stream.createConsumer = function( callback, modifiers ) {
-		// Define default consumer
-		var consumer = function( item, context ) {
-			var status = callback( item, context );
-			if ( status === undefined ) return true;
-			return status;
-		}
-
-		if ( modifiers === undefined ) {
-			return consumer;
-		}
-
-		// Apply modifiers to our consumer
-		if ( typeof modifiers.filter === "function" ) {
-			consumer = applyFilter( consumer, modifiers.filter );
-		}
-		if ( typeof modifiers.map === "function" ) {
-			consumer = applyMap( consumer, modifiers.map );
-		}
-		if ( typeof modifiers.repeat === "number" ) {
-			consumer = applyRepeat( consumer, modifiers.repeat );
-		}
-		if ( typeof modifiers.take === "number" ) {
-			consumer = applyTake( consumer, modifiers.take );
-		}
-		if ( typeof modifiers.skip === "number" ) {
-			consumer = applySkip( consumer, modifiers.skip );
-		}
-		return consumer;
-	};
-
-	function applyFilter( consumer, fun ) {
-		return function( item, context ) {
-			if ( fun( item ) ) {
-				return consumer( item, context );
-			} else {
-				return false;
-			}
-		}
-	}
-
-	function applyMap( consumer, fun ) {
-		return function( item, context ) {
-			return consumer( fun( item ), context );
-		}
-	}
-
-	function applyRepeat( consumer, num ) {
-		return function( item, context ) {
-			for ( var i = 0; i < num; i += 1 ) {
-				if ( consumer( item, context ) === false ) {
-					return false;
-				}
-			}
-			return true;
-		}
-	}
-
-	function applyTake( consumer, num ) {
-		return function( item, context ) {
-			if ( num > 0 ) {
-				num -= 1;
-				return consumer( item, context );
-			}
-			return false;
-		}
-	}
-
-	function applySkip( consumer, num ) {
-		return function( item, context ) {
-			if ( num > 0 ) {
-				num -= 1;
-				return true;
-			}
-			return consumer( item, context );
-		}
-	}
-
-})();
 
 
+// Prototype methods
 
 // Append data to stream
 Stream.prototype.push = function( item, context ) {
@@ -202,3 +121,91 @@ Stream.prototype.once = function( callback ) {
 	}
 	return this;
 };
+
+
+
+// Static functions
+
+(function() {
+
+	// Create a consumer function with recursively mapped modifiers
+	// All stream manipulating logic is here
+	Stream.createConsumer = function( callback, modifiers ) {
+		// Define default consumer
+		var consumer = function( item, context ) {
+			var status = callback( item, context );
+			if ( status === undefined ) return true;
+			return status;
+		}
+
+		if ( modifiers === undefined ) {
+			return consumer;
+		}
+
+		// Apply modifiers to our consumer
+		if ( typeof modifiers.filter === "function" ) {
+			consumer = applyFilter( consumer, modifiers.filter );
+		}
+		if ( typeof modifiers.map === "function" ) {
+			consumer = applyMap( consumer, modifiers.map );
+		}
+		if ( typeof modifiers.repeat === "number" ) {
+			consumer = applyRepeat( consumer, modifiers.repeat );
+		}
+		if ( typeof modifiers.take === "number" ) {
+			consumer = applyTake( consumer, modifiers.take );
+		}
+		if ( typeof modifiers.skip === "number" ) {
+			consumer = applySkip( consumer, modifiers.skip );
+		}
+		return consumer;
+	};
+
+	function applyFilter( consumer, fun ) {
+		return function( item, context ) {
+			if ( fun( item ) ) {
+				return consumer( item, context );
+			} else {
+				return false;
+			}
+		}
+	}
+
+	function applyMap( consumer, fun ) {
+		return function( item, context ) {
+			return consumer( fun( item ), context );
+		}
+	}
+
+	function applyRepeat( consumer, num ) {
+		return function( item, context ) {
+			for ( var i = 0; i < num; i += 1 ) {
+				if ( consumer( item, context ) === false ) {
+					return false;
+				}
+			}
+			return true;
+		}
+	}
+
+	function applyTake( consumer, num ) {
+		return function( item, context ) {
+			if ( num > 0 ) {
+				num -= 1;
+				return consumer( item, context );
+			}
+			return false;
+		}
+	}
+
+	function applySkip( consumer, num ) {
+		return function( item, context ) {
+			if ( num > 0 ) {
+				num -= 1;
+				return true;
+			}
+			return consumer( item, context );
+		}
+	}
+
+})();
