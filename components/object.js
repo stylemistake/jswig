@@ -76,8 +76,10 @@ Object.create = function( prototype, properties ) {
 };
 
 Object.extend = function( a, b ) {
-	Object.keys( b ).forEach( function( i ) {
-		a[ i ] = b[ i ];
+	Object.keys( b ).forEach(function( i ) {
+		if ( b.hasOwnProperty( i ) ) {
+			a[ i ] = b[ i ];
+		}
 	});
 };
 
