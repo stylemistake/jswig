@@ -81,6 +81,7 @@ Object.extend = function( a, b ) {
 			a[ i ] = b[ i ];
 		}
 	});
+	return a;
 };
 
 Object.linkProperty = function( o, a, b ) {

@@ -12,4 +12,10 @@ $.ready = function( f ) {
 	return $;
 };
 
+// $.exit
+$.exit = function( f ) {
+	$.events.on( "exit", f );
+	return $;
+};
+
 })( jswig );
