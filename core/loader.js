@@ -16,7 +16,11 @@ $.load = function( names, path, type ) {
 	}
 	names.forEach(function( name ) {
 		$.log( "jswig: loading " + type + " [" + name + ".js]..." );
-		load( path + "/" + name + ".js" );
+		try {
+			load( path + "/" + name + ".js" );
+		} catch ( e ) {
+			$.log.error( "jswig: failed to load" );
+		}
 	});
 	return $;
 };

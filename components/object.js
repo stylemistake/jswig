@@ -76,6 +76,9 @@ Object.create = function( prototype, properties ) {
 };
 
 Object.extend = function( a, b ) {
+	if ( !a || !b ) {
+		return a || b;
+	}
 	Object.keys( b ).forEach(function( i ) {
 		if ( b.hasOwnProperty( i ) ) {
 			a[ i ] = b[ i ];
@@ -85,12 +88,12 @@ Object.extend = function( a, b ) {
 };
 
 Object.linkProperty = function( o, a, b ) {
-	Object.defineProperty( o, b, {
+	Object.defineProperty( o, a, {
 		"get": function() {
-			return this[ a ];
+			return this[ b ];
 		},
 		"set": function( value ) {
-			this[ a ] = value;
+			this[ b ] = value;
 		}
 	});
 };

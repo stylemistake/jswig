@@ -9,9 +9,6 @@ var jswig = function() {
 // Assign jswig to a global shortcut name
 var $ = jswig;
 
-// Load globals
-load( "global/helpers.js" );
-
 // Load core modules
 load( "core/init.js" );
 load( "core/events.js" );
