@@ -1,7 +1,7 @@
+load( "../components/object.js" );
+
 // Initialize entrypoints outside of closure
 var init, exit;
-
-load( "../components/object.js" );
 
 (function( $ ) {
 
@@ -12,13 +12,11 @@ $.config = {
 	// Default controller config
 	"vendor": "Misc",
 	"version": "0.1",
+	// Common module configs
 	"midi": {
 		"ports_in": 0,
 		"ports_out": 0,
 	},
-	// TODO: Module list
-	// "path": "vendor/jswig/"
-	// "modules": [],
 };
 
 // $.init
@@ -35,7 +33,7 @@ $.init = function( config ) {
 		throw new Error( "config.name is required" );
 	}
 
-	// TODO: Verify UUID and midi ports
+	// TODO: Verify UUID
 
 	// Merge global config with provided config
 	Object.extend( $.config, config );
@@ -50,17 +48,14 @@ $.init = function( config ) {
 		$.config.midi.ports_out
 	);
 
-	// TODO: Load modules
-	// $.log( "jswig: loading extra modules..." );
-	// $.config.modules.forEach(function( module ) {
-	// 	$.log( "jswig: " + module );
-	// 	load( "modules/" + module + ".js" );
-	// });
-
 	// Extra initialization on init
 	$.events.on( "_jswig_core_init", function() {
 		// TODO: extra initialization
 	});
+
+	// Trigger events from modules
+	$.events.trigger( "_jswig_core_pre_init" );
+	$.events.trigger( "_jswig_module_pre_init" );
 
 	init = function() {
 		$.log( "jswig: initializing..." );
@@ -68,6 +63,10 @@ $.init = function( config ) {
 		$.events.trigger( "_jswig_module_init" );
 		$.log( "jswig: ready!" );
 		$.events.trigger( "ready", $ );
+	}
+
+	exit = function() {
+		$.events.trigger( "exit", $ );
 	}
 
 	return $;
