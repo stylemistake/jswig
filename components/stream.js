@@ -16,9 +16,9 @@ function Stream( parent ) {
 // Prototype methods
 
 // Append data to stream
-Stream.prototype.push = function( item, context ) {
+Stream.prototype.push = function( item ) {
 	for ( var i = 0; i < this.consumers.length; i += 1 ) {
-		this.consumers[ i ]( item, context );
+		this.consumers[ i ]( item );
 	}
 	return this;
 };
@@ -132,8 +132,8 @@ Stream.prototype.once = function( callback ) {
 	// All stream manipulating logic is here
 	Stream.createConsumer = function( callback, modifiers ) {
 		// Define default consumer
-		var consumer = function( item, context ) {
-			var status = callback( item, context );
+		var consumer = function( item ) {
+			var status = callback( item );
 			if ( status === undefined ) return true;
 			return status;
 		}
@@ -162,9 +162,9 @@ Stream.prototype.once = function( callback ) {
 	};
 
 	function applyFilter( consumer, fun ) {
-		return function( item, context ) {
+		return function( item ) {
 			if ( fun( item ) ) {
-				return consumer( item, context );
+				return consumer( item );
 			} else {
 				return false;
 			}
@@ -172,15 +172,15 @@ Stream.prototype.once = function( callback ) {
 	}
 
 	function applyMap( consumer, fun ) {
-		return function( item, context ) {
-			return consumer( fun( item ), context );
+		return function( item ) {
+			return consumer( fun( item ) );
 		}
 	}
 
 	function applyRepeat( consumer, num ) {
-		return function( item, context ) {
+		return function( item ) {
 			for ( var i = 0; i < num; i += 1 ) {
-				if ( consumer( item, context ) === false ) {
+				if ( consumer( item ) === false ) {
 					return false;
 				}
 			}
@@ -189,22 +189,22 @@ Stream.prototype.once = function( callback ) {
 	}
 
 	function applyTake( consumer, num ) {
-		return function( item, context ) {
+		return function( item ) {
 			if ( num > 0 ) {
 				num -= 1;
-				return consumer( item, context );
+				return consumer( item );
 			}
 			return false;
 		}
 	}
 
 	function applySkip( consumer, num ) {
-		return function( item, context ) {
+		return function( item ) {
 			if ( num > 0 ) {
 				num -= 1;
 				return true;
 			}
-			return consumer( item, context );
+			return consumer( item );
 		}
 	}
 
