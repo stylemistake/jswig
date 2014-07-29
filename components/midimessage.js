@@ -54,9 +54,9 @@ Object.defineProperty( MidiMessage.prototype, "relative", {
 	}
 });
 
-Object.linkProperty( MidiMessage.prototype, "data1", "cc" );
-Object.linkProperty( MidiMessage.prototype, "data1", "note" );
-Object.linkProperty( MidiMessage.prototype, "data2", "value" );
+Object.linkProperty( MidiMessage.prototype, "cc", "data1" );
+Object.linkProperty( MidiMessage.prototype, "note", "data1" );
+Object.linkProperty( MidiMessage.prototype, "value", "data2" );
 
 
 
@@ -67,35 +67,35 @@ MidiMessage.prototype.isValid = function() {
 };
 
 MidiMessage.prototype.isNote = function() {
-	return inRange( this.status, 0x80, 0x9f );
+	return this.status.inRange( 0x80, 0x9f );
 };
 
 MidiMessage.prototype.isNoteOff = function() {
-	return inRange( this.status, 0x80, 0x8f );
+	return this.status.inRange( 0x80, 0x8f );
 };
 
 MidiMessage.prototype.isNoteOn = function() {
-	return inRange( this.status, 0x90, 0x9f );
+	return this.status.inRange( 0x90, 0x9f );
 };
 
 MidiMessage.prototype.isKeyPressure = function() {
-	return inRange( this.status, 0xa0, 0xaf );
+	return this.status.inRange( 0xa0, 0xaf );
 };
 
 MidiMessage.prototype.isControl = function() {
-	return inRange( this.status, 0xb0, 0xbf );
+	return this.status.inRange( 0xb0, 0xbf );
 };
 
 MidiMessage.prototype.isProgramChange = function() {
-	return inRange( this.status, 0xc0, 0xcf );
+	return this.status.inRange( 0xc0, 0xcf );
 };
 
 MidiMessage.prototype.isChannelPressure = function() {
-	return inRange( this.status, 0xd0, 0xdf );
+	return this.status.inRange( 0xd0, 0xdf );
 };
 
 MidiMessage.prototype.isPitchbend = function() {
-	return inRange( this.status, 0xe0, 0xef );
+	return this.status.inRange( 0xe0, 0xef );
 };
 
 MidiMessage.prototype.isAftertouch = function() {
